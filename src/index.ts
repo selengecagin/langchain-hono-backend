@@ -19,6 +19,10 @@ app.get('/', (c) => {
   return c.text('Hello Hono!')
 })
 
+
+//vector db
+let vectorStore:MemoryVectorStore;
+
 app.get('/loadTextEmbeddings', async(c) => {
     const text = await getTextFile();
     const splitter = new RecursiveCharacterTextSplitter({
@@ -28,6 +32,8 @@ app.get('/loadTextEmbeddings', async(c) => {
     });
 
     const output : Document<Record<string, any>>[] = await splitter.createDocuments([text]);
+
+    // https://js.langchain.com/v0.2/docs/integrations/text_embedding/ollama/
 
     const embeddings = new OllamaEmbeddings({
         model: "gemma2:2b",
