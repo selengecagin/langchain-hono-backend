@@ -3,7 +3,8 @@ import { Hono } from 'hono'
 import path from 'path'
 import {promises as fs} from 'fs'
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import {MemoryVectorStore} from "langchain/vectorstores/memory";
+import {MemoryVectorStore} from "langchain/vectorstores/memory"; // This is the default vector store, *db for vectors
+import { OllamaEmbeddings } from "@langchain/community/embeddings/ollama";
 
 const app = new Hono()
 
@@ -26,7 +27,7 @@ app.get('/loadTextEmbeddings', async(c) => {
         chunkOverlap: 50,
     });
 
-    const output: Document<Record<string, any>>[] = await splitter.createDocuments([text]);
+    const output : Document<Record<string, any>>[] = await splitter.createDocuments([text]);
 
     return c.json({ output });
 })
@@ -38,7 +39,6 @@ serve({
   fetch: app.fetch,
   port
 })
-
 
 
 //http://localhost:3002/loadTextEmbeddings
