@@ -17,6 +17,10 @@ app.get('/', (c) => {
   return c.text('Hello Hono!')
 })
 
+app.get('/loadTextEmbeddings', async(c) => {
+    return c.text('Hello Hono!')
+})
+
 const port = 3002
 console.log(`Server is running on port ${port}`)
 
