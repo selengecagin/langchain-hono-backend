@@ -18,7 +18,7 @@ app.get('/', (c) => {
 })
 
 app.get('/loadTextEmbeddings', async(c) => {
-    return c.text('Hello Hono!')
+    const text = await getTextFile();
 })
 
 const port = 3002
