@@ -1,40 +1,42 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import path from 'path'
-import {promises as fs} from 'fs'
+import path from "path";
+import { promises as fs } from "fs";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import {MemoryVectorStore} from "langchain/vectorstores/memory"; // This is the default vector store, *db for vectors
+import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { OllamaEmbeddings } from "@langchain/community/embeddings/ollama";
 
 const app = new Hono()
 
-    const getTextFile = async () : Promise<string> => {
-        const filePath = path.join(__dirname, '../data/text.txt')
-        const data:string = await fs.readFile(filePath, 'utf-8');
-        return data;
+const getTextFile = async () => {
 
-    }
+    const filePath = path.join(__dirname, "../data/langchain-test.txt");
+    const data = await fs.readFile(filePath, "utf-8");
+
+    return data;
+}
 
 app.get('/', (c) => {
-  return c.text('Hello Hono!')
+    return c.text('Hello Hono!')
 })
 
+// Vector Db
+let vectorStore : MemoryVectorStore;
 
-//vector db
-let vectorStore:MemoryVectorStore;
+app.get('/loadTextEmbeddings', async (c) => {
 
-app.get('/loadTextEmbeddings', async(c) => {
     const text = await getTextFile();
+
     const splitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 1000, // can be 500-800
+        chunkSize: 1000,
         separators:['\n\n', '\n', ' ', '', '###'], //I have added ### as a separator to Titles in text.txt
-        chunkOverlap: 50,
+
+        chunkOverlap: 50
     });
 
-    const output : Document<Record<string, any>>[] = await splitter.createDocuments([text]);
+    const output = await splitter.createDocuments([text])
 
-    // https://js.langchain.com/v0.2/docs/integrations/text_embedding/ollama/
-
+// https://js.langchain.com/v0.2/docs/integrations/text_embedding/ollama/
     const embeddings = new OllamaEmbeddings({
         model: "gemma2:2b",
         baseUrl: "http://localhost:11434",
@@ -47,16 +49,21 @@ app.get('/loadTextEmbeddings', async(c) => {
 
     vectorStore = await MemoryVectorStore.fromDocuments(output, embeddings);
 
-    return c.json({ output });
+    return c.json({message: 'Text Embeddings Loaded'});
+})
+
+app.post('/ask', async (c) => {
+
+    const { question } = await c.req.json();
+
 })
 
 const port = 3002
 console.log(`Server is running on port ${port}`)
 
 serve({
-  fetch: app.fetch,
-  port
+    fetch: app.fetch,
+    port
 })
-
 
 //http://localhost:3002/loadTextEmbeddings
