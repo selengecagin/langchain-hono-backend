@@ -45,6 +45,7 @@ app.get('/loadTextEmbeddings', async(c) => {
         },
     });
 
+    vectorStore = await MemoryVectorStore.fromDocuments(output, embeddings);
 
     return c.json({ output });
 })
