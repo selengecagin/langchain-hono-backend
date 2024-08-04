@@ -2,7 +2,7 @@ import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import path from 'path'
 import {promises as fs} from 'fs'
-
+import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
 const app = new Hono()
 
@@ -12,7 +12,6 @@ const app = new Hono()
         return data;
 
     }
-
 
 app.get('/', (c) => {
   return c.text('Hello Hono!')
