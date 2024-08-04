@@ -8,6 +8,7 @@ import { OllamaEmbeddings } from "@langchain/community/embeddings/ollama";
 import {PromptTemplate} from "@langchain/core/prompts";
 import {createStuffDocumentsChain} from "langchain/chains/combine_documents";
 import {Ollama} from "@langchain/community/llms/ollama";
+import {createRetrievalChain} from "langchain/chains/retrieval";
 
 const app = new Hono()
 
@@ -77,7 +78,14 @@ Question: {question}
 
 Answer: 
   `);
-    const documentChain = await createStuffDocumentsChain({llm:ollama, prompt})
+    const documentChain = await createStuffDocumentsChain({llm:ollama, prompt});
+
+    const retrievalChain = await createRetrievalChain({
+ combineDocsChain: documentChain,
+        retriever:vectorStore.asRetriever(kOrFields:{
+            k:3
+    })
+    });
 });
 
 
