@@ -3,6 +3,7 @@ import { Hono } from 'hono'
 import path from 'path'
 import {promises as fs} from 'fs'
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import {MemoryVectorStore} from "langchain/vectorstores/memory";
 
 const app = new Hono()
 
@@ -37,3 +38,7 @@ serve({
   fetch: app.fetch,
   port
 })
+
+
+
+//http://localhost:3002/loadTextEmbeddings
