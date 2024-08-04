@@ -10,6 +10,7 @@ import {PromptTemplate} from "@langchain/core/prompts";
 import {createStuffDocumentsChain} from "langchain/chains/combine_documents";
 import {Ollama} from "@langchain/community/llms/ollama";
 import {createRetrievalChain} from "langchain/chains/retrieval";
+import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 
 // Hono uygulamasının oluşturulması
 const app = new Hono()
