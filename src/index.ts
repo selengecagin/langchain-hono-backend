@@ -29,6 +29,17 @@ app.get('/loadTextEmbeddings', async(c) => {
 
     const output : Document<Record<string, any>>[] = await splitter.createDocuments([text]);
 
+    const embeddings = new OllamaEmbeddings({
+        model: "gemma2:2b",
+        baseUrl: "http://localhost:11434",
+        requestOptions: {
+            useMMap: true, // use_mmap 1
+            numThread: 6, // num_thread 6
+            numGpu: 1, // num_gpu 1
+        },
+    });
+
+
     return c.json({ output });
 })
 
