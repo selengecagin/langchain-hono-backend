@@ -5,6 +5,8 @@ import { promises as fs } from "fs";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { OllamaEmbeddings } from "@langchain/community/embeddings/ollama";
+import {PROMPT_TEMPLATE} from "langchain/dist/retrievers/document_compressors/chain_extract_prompt";
+import {PromptTemplate} from "@langchain/core/prompts";
 
 const app = new Hono()
 
@@ -59,6 +61,8 @@ app.post('/ask', async (c) => {
     if(!vectorStore){
         return c.json({message: 'Text Embeddings not loaded'});
     }
+
+
 })
 
 const port = 3002
