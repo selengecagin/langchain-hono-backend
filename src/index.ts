@@ -6,6 +6,14 @@ import {promises as fs} from 'fs'
 
 const app = new Hono()
 
+    const getTextFile = async () : Promise<string> => {
+        const filePath = path.join(__dirname, '../data/text.txt')
+        const data:string = await fs.readFile(filePath, 'utf-8');
+        return data;
+
+    }
+
+
 app.get('/', (c) => {
   return c.text('Hello Hono!')
 })
