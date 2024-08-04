@@ -21,6 +21,17 @@ const ollama = new Ollama({
     model: "gemma2:27b", // Kullanılacak model
 });
 
+// Embedding modelinin yapılandırılması
+const embeddings = new OllamaEmbeddings({
+    model: "gemma2:27b",
+    baseUrl: "http://localhost:11434",
+    requestOptions: {
+        useMMap: true,
+        numThread: 6,
+        numGpu: 1,
+    },
+});
+
 // Metin dosyasını okuma fonksiyonu
 const getTextFile = async () => {
     // Dosya yolunun belirlenmesi
@@ -54,16 +65,6 @@ app.get('/loadTextEmbeddings', async (c) => {
     // Metnin bölünmesi ve dokümanların oluşturulması
     const output = await splitter.createDocuments([text])
 
-    // Embedding modelinin yapılandırılması
-    const embeddings = new OllamaEmbeddings({
-        model: "gemma2:27b",
-        baseUrl: "http://localhost:11434",
-        requestOptions: {
-            useMMap: true,
-            numThread: 6,
-            numGpu: 1,
-        },
-    });
 
     // Vektör veritabanının oluşturulması
     vectorStore = await MemoryVectorStore.fromDocuments(output, embeddings);
