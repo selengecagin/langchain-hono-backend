@@ -42,6 +42,16 @@ const getTextFile = async () => {
     return data;
 }
 
+// PDF dosyasını okuma fonksiyonu
+const loadPdfFile = async () => {
+    // Dosya yolunun belirlenmesi
+    const filePath = path.join(__dirname, "../data/trendspro-report.pdf");
+
+    const loader = new PDFLoader(filePath);
+
+    return await loader.load();
+}
+
 // Kök yol için basit bir yanıt
 app.get('/', (c) => {
     return c.text('Hello Hono!')
@@ -65,9 +75,21 @@ app.get('/loadTextEmbeddings', async (c) => {
     // Metnin bölünmesi ve dokümanların oluşturulması
     const output = await splitter.createDocuments([text])
 
-
     // Vektör veritabanının oluşturulması
     vectorStore = await MemoryVectorStore.fromDocuments(output, embeddings);
+
+    // Başarı mesajının döndürülmesi
+    const response = {message: "Text embeddings loaded successfully."};
+    return c.json(response);
+})
+
+// Metin embeddingler'ini yükleme endpoint'i
+app.get('/loadPdfEmbeddings', async (c) => {
+    // Metin dosyasının okunması
+    const documents = await loadPdfFile();
+
+    // Vektör veritabanının oluşturulması
+    vectorStore = await MemoryVectorStore.fromDocuments(documents, embeddings);
 
     // Başarı mesajının döndürülmesi
     const response = {message: "Text embeddings loaded successfully."};
