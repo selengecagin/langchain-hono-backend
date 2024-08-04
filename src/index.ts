@@ -76,10 +76,10 @@ Context: {context}
 Question: {question}
 
 Answer: 
-  `)
+  `);
+    const documentChain = await createStuffDocumentsChain({llm:ollama, prompt})
 });
 
-const documentChain = await createStuffDocumentsChain()
 
 const port = 3002
 console.log(`Server is running on port ${port}`)
