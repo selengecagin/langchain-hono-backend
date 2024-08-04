@@ -24,6 +24,10 @@ app.get('/loadTextEmbeddings', async(c) => {
         separators:['\n\n', '\n', ' ', '', '###'], //I have added ### as a separator to Titles in text.txt
         chunkOverlap: 50,
     });
+
+    const output: Document<Record<string, any>>[] = await splitter.createDocuments([text]);
+
+    return c.json({ output });
 })
 
 const port = 3002
