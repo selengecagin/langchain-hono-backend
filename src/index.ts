@@ -7,8 +7,14 @@ import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { OllamaEmbeddings } from "@langchain/community/embeddings/ollama";
 import {PromptTemplate} from "@langchain/core/prompts";
 import {createStuffDocumentsChain} from "langchain/chains/combine_documents";
+import {Ollama} from "@langchain/community/llms/ollama";
 
 const app = new Hono()
+
+const ollama = new Ollama({
+    baseUrl: "http://localhost:11434",
+    model: "gemma2:2b",
+});
 
 const getTextFile = async () => {
 
