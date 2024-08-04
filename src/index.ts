@@ -56,6 +56,9 @@ app.post('/ask', async (c) => {
 
     const { question } = await c.req.json();
 
+    if(!vectorStore){
+        return c.json({message: 'Text Embeddings not loaded'});
+    }
 })
 
 const port = 3002
