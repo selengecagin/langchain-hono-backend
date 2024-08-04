@@ -22,6 +22,7 @@ app.get('/loadTextEmbeddings', async(c) => {
     const splitter = new RecursiveCharacterTextSplitter({
         chunkSize: 1000, // can be 500-800
         separators:['\n\n', '\n', ' ', '', '###'], //I have added ### as a separator to Titles in text.txt
+        chunkOverlap: 50,
     });
 })
 
