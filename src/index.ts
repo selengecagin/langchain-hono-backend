@@ -73,6 +73,8 @@ Answer:
   `)
 });
 
+const documentChain = await createStuffDocumentsChain()
+
 const port = 3002
 console.log(`Server is running on port ${port}`)
 
