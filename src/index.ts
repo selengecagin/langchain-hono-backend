@@ -6,6 +6,7 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { OllamaEmbeddings } from "@langchain/community/embeddings/ollama";
 import {PromptTemplate} from "@langchain/core/prompts";
+import {createStuffDocumentsChain} from "langchain/chains/combine_documents";
 
 const app = new Hono()
 
@@ -61,6 +62,7 @@ app.post('/ask', async (c) => {
         return c.json({message: 'Text Embeddings not loaded'});
     }
 
+    // prompt template
     const prompt = PromptTemplate.fromTemplate(`You are a helpful AI assistant. Answer the following question based only on the provided context. If the answer cannot be derived from the context, say "I don't have enough information to answer that question." If I like your results I'll tip you $1000!
 
 Context: {context}
